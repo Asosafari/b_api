@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.UuidGenerator;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -37,7 +38,9 @@ public class Publisher {
     private Set<Book> books = new HashSet<>();
 
     @ManyToMany(mappedBy = "authors")
-    private Set<Author> authors = new HashSet<>();
+    private Set<Author> authors;
+    private LocalDateTime createdDate;
+    private LocalDateTime updateDate;
 
 
 }

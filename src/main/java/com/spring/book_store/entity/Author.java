@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.UuidGenerator;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -39,6 +40,8 @@ public class Author {
     @JoinTable(name = "author_publisher"
             ,joinColumns = @JoinColumn(name = "author_id")
             ,inverseJoinColumns = @JoinColumn(name = "publisher_id"))
-    private Set<Publisher> publishers = new HashSet<>();
+    private Set<Publisher> publishers;
+    private LocalDateTime createdDate;
+    private LocalDateTime updateDate;
 
 }

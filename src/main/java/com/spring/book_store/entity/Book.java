@@ -3,6 +3,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -29,6 +31,10 @@ public class Book {
     @Version
     private Integer version;
 
+    private BigDecimal price;
+    private LocalDateTime createdDate;
+    private LocalDateTime updateDate;
+
     @ManyToOne
     private Publisher publisher;
 
@@ -36,7 +42,7 @@ public class Book {
     @JoinTable(name = "author_book"
             , joinColumns = @JoinColumn(name = "book_id")
             ,inverseJoinColumns = @JoinColumn(name = "author_id"))
-    private Set<Author> authors = new HashSet<>();
+    private Set<Author> authors;
 
 
 }
