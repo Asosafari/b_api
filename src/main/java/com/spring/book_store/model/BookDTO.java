@@ -20,7 +20,7 @@ import java.util.UUID;
 @Builder
 public class BookDTO {
 
-    private UUID uuid;
+    private UUID id;
     private String title;
     private Integer version;
     private Publisher publisher;

@@ -21,7 +21,7 @@ public class PublishetDTO {
 
     private UUID id;
     private String label;
-    private String ZipCode;
+    private String zipCode;
     private Integer version;
     private Set<Book> books;
     private Set<Author> authors;
