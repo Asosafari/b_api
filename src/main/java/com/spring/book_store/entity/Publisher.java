@@ -1,11 +1,16 @@
 package com.spring.book_store.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
+import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -20,6 +25,7 @@ import java.util.UUID;
 
 @Setter
 @Getter
+@Builder
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Entity
@@ -27,19 +33,41 @@ public class Publisher {
 
     @Id
     @UuidGenerator
+    //@JdbcTypeCode(SqlTypes.CHAR)
     @Column(length = 36, columnDefinition = "varchar",updatable = false,nullable = false)
     private UUID id;
+
+    @NotBlank
+    @NotNull
+    @Size(max = 50)
+    @Column(length = 50)
     private String label;
-    private String ZipCode;
+
+    @NotBlank
+    @NotNull
+    @Size(max = 50)
+    @Column(length = 50)
+    private String zipCode;
+
+    @Email()
+    String email;
+
     @Version
     private Integer version;
 
+    @Builder.Default
     @OneToMany(mappedBy = "publisher")
     private Set<Book> books = new HashSet<>();
 
-    @ManyToMany(mappedBy = "authors")
-    private Set<Author> authors;
+    @Builder.Default
+    @ManyToMany(mappedBy = "publishers")
+    private Set<Author> authors = new HashSet<>();
+
+    @CreationTimestamp
+    @Column(nullable = false)
     private LocalDateTime createdDate;
+
+    @UpdateTimestamp
     private LocalDateTime updateDate;
 
 
