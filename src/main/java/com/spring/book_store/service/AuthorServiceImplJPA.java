@@ -15,6 +15,7 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 /**
@@ -88,26 +89,66 @@ public class AuthorServiceImplJPA implements AuthorService {
 
     @Override
     public Optional<AuthorDTO> getAuthorById(UUID id) {
-        return Optional.empty();
+        return Optional.ofNullable(authoreMappper.authorToAuthorDTO(authorRepository.findById(id).orElse(null)));
     }
 
     @Override
     public AuthorDTO saveNewAuthor(AuthorDTO author) {
-        return null;
+
+        return authoreMappper.authorToAuthorDTO(authorRepository.save(authoreMappper.authorDTOToAthor(author)));
     }
 
     @Override
     public Optional<AuthorDTO> updateAuthorById(UUID id, AuthorDTO authorDTO) {
-        return Optional.empty();
+
+        AtomicReference<Optional<AuthorDTO>> atomicReference = new AtomicReference<>();
+
+        authorRepository.findById(id).ifPresentOrElse(foundAuthor ->{
+            foundAuthor.setName(authorDTO.getName());
+            foundAuthor.setLastName(authorDTO.getLastName());
+            foundAuthor.setEmail(authorDTO.getEmail());
+            foundAuthor.setBooks(authorDTO.getBooks());
+            foundAuthor.setPublishers(authorDTO.getPublishers());
+            foundAuthor.setVersion(authorDTO.getVersion());
+            atomicReference.set(Optional.of(authoreMappper.authorToAuthorDTO(authorRepository.save(foundAuthor))));
+        } , () -> atomicReference.set(Optional.empty())
+        );
+        return atomicReference.get();
     }
 
     @Override
     public boolean deleteAuthoeById(UUID id) {
+        if (authorRepository.existsById(id)){
+            authorRepository.deleteById(id);
+            return true;
+        }
         return false;
     }
 
     @Override
-    public Optional<AuthorDTO> patchById(UUID id) {
-        return Optional.empty();
+    public Optional<AuthorDTO> patchById(UUID id, AuthorDTO authorDTO) {
+        AtomicReference<Optional<AuthorDTO>> atomicReference = new AtomicReference<>();
+        authorRepository.findById(id).ifPresentOrElse(foundAuthor ->{
+            if (StringUtils.hasText(authorDTO.getName())){
+                foundAuthor.setName(authorDTO.getName());
+            }
+            if (StringUtils.hasText(authorDTO.getLastName())){
+                foundAuthor.setLastName(authorDTO.getLastName());
+            }
+            if (StringUtils.hasText(authorDTO.getEmail())){
+                foundAuthor.setEmail(authorDTO.getEmail());
+            }
+            if (authorDTO.getPublishers() != null){
+                foundAuthor.setPublishers(authorDTO.getPublishers());
+            }
+            if (authorDTO.getBooks() != null){
+                foundAuthor.setBooks(authorDTO.getBooks());
+            }
+
+            atomicReference.set(Optional.of(authoreMappper.authorToAuthorDTO(authorRepository.save(foundAuthor))));
+
+        }, () ->atomicReference.set(Optional.empty())
+                );
+        return atomicReference.get();
     }
 }

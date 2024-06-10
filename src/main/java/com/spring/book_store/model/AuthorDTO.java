@@ -26,4 +26,5 @@ public class AuthorDTO {
     private Set<Publisher> publishers;
     private LocalDateTime createdDate;
     private LocalDateTime updateDate;
+    private String email;
 }

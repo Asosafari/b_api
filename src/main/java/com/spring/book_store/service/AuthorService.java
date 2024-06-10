@@ -13,7 +13,7 @@ public interface AuthorService {
     AuthorDTO saveNewAuthor(AuthorDTO author);
     Optional<AuthorDTO> updateAuthorById(UUID id,AuthorDTO authorDTO);
     boolean deleteAuthoeById(UUID id);
-    Optional<AuthorDTO> patchById(UUID id);
+    Optional<AuthorDTO> patchById(UUID id,AuthorDTO authorDTO);
 
 
 }
