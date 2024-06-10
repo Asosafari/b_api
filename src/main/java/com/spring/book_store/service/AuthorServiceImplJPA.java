@@ -12,11 +12,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 
 /**
  * Author: ASOU SAFARI
@@ -36,22 +34,34 @@ public class AuthorServiceImplJPA implements AuthorService {
 
 
     @Override
-    public Page<AuthorDTO> listOfAuthors(String name, String lastName, Integer pageNumber, Integer pageSize) {
+    public Page<AuthorDTO> listOfAuthors(String name, String lastName, Integer pageNumber, Integer pageSize, String title, String label) {
 
         PageRequest pageRequest = buildPageRequest(pageNumber,pageSize);
 
         Page<Author> authorPage;
-        if (StringUtils.hasText(name) && lastName == null){
+        if (StringUtils.hasText(name) && lastName == null && title == null && label == null){
             authorPage = listAuthorByName(name,pageRequest);
-        }else if (StringUtils.hasText(lastName) && name == null){
+        }else if (StringUtils.hasText(lastName) && name == null && title == null && label == null){
             authorPage = listAuthorByLastName(lastName,pageRequest);
-        }else if ((StringUtils.hasText(name)) && StringUtils.hasText(lastName)){
+        }else if ((StringUtils.hasText(name)) && StringUtils.hasText(lastName) && title == null && label == null){
             authorPage = listAuthorsByNameAndLastName(name,lastName,pageRequest);
-        }else {
+        }else if (StringUtils.hasText(title) && name == null && lastName == null  && label == null){
+            authorPage = listAuthorByBookTitle(title,pageRequest);
+        }else if (StringUtils.hasText(label) && name == null && lastName == null  && title == null){
+            authorPage = listAuthorByPublisherLabel(label,pageRequest);
+        }
+        else {
             authorPage = authorRepository.findAll(pageRequest);
         }
-
         return authorPage.map(authoreMappper ::authorToAuthorDTO);
+    }
+
+    private Page<Author> listAuthorByPublisherLabel(String label, PageRequest pageRequest) {
+        return authorRepository.findAllByPublisherLabelIsLikeIgnoreCase(label,pageRequest);
+    }
+
+    private Page<Author> listAuthorByBookTitle(String title, PageRequest pageRequest) {
+        return authorRepository.findAllByBookTitleIsLikeIgnoreCase(title,pageRequest);
     }
 
     private Page<Author> listAuthorsByNameAndLastName(String name, String lastName, PageRequest pageRequest) {
