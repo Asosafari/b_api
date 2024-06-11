@@ -7,7 +7,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface BookService {
-    Page<Optional<BookDTO>> listOfBooks(String title, String authorName, String authorLastName,
+    Page<BookDTO> listOfBooks(String title, String authorName, String authorLastName,
                                         String publisherLabel, Integer pageNumber, Integer pageSize);
     Optional<BookDTO> getBookById(UUID id);
     BookDTO saveNewBook(BookDTO bookDTO);
