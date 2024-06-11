@@ -29,14 +29,11 @@ public class AuthorServiceImplJPA implements AuthorService {
     private final AuthoreMappper authoreMappper;
     private final AuthorRepository authorRepository;
 
-    private static final int DEFAULT_PAGE_NUMBER = 0;
-    private static final int DEFAULT_PAGE_SIZE = 25;
-
 
     @Override
     public Page<AuthorDTO> listOfAuthors(String name, String lastName, Integer pageNumber, Integer pageSize, String title, String label) {
 
-        PageRequest pageRequest = buildPageRequest(pageNumber,pageSize);
+        PageRequest pageRequest = BuildPageRequest.build(pageNumber,pageSize,"name");
 
         Page<Author> authorPage;
         if (StringUtils.hasText(name) && lastName == null && title == null && label == null){
@@ -74,27 +71,6 @@ public class AuthorServiceImplJPA implements AuthorService {
 
     private Page<Author> listAuthorByName(String name, PageRequest pageRequest) {
         return authorRepository.findAllByNameIsLikeIgnoreCase(name,pageRequest);
-    }
-
-    private PageRequest buildPageRequest(Integer pageNumber, Integer pageSize) {
-        int queryPageNumber;
-        int queryPageSize;
-        if (pageNumber != null && pageNumber > 0){
-            queryPageNumber = pageNumber - 1 ;
-        }else {
-            queryPageNumber = DEFAULT_PAGE_NUMBER;
-        }
-        if (pageSize == null){
-            queryPageSize = DEFAULT_PAGE_SIZE;
-        }else {
-            if (pageSize > 1000){
-                queryPageSize = 1000;
-            }else {
-                queryPageSize = pageSize;
-            }
-        }
-        Sort sort = Sort.by(Sort.Order.asc("name"));
-        return PageRequest.of(queryPageNumber,queryPageSize,sort);
     }
 
     @Override
