@@ -48,6 +48,7 @@ public class DataBootstrap implements CommandLineRunner {
                     .createdDate(LocalDateTime.now())
                     .updateDate(LocalDateTime.now())
                     .build();
+
             Author author = Author.builder()
                     .id(UUID.randomUUID())
                     .version(1)
@@ -75,7 +76,6 @@ public class DataBootstrap implements CommandLineRunner {
 
             book.addAuthor(saveAuthor);
             bookRepository.save(book);
-
 
         }
     }

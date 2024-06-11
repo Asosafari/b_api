@@ -104,7 +104,6 @@ public class AuthorServiceImplJPA implements AuthorService {
 
     @Override
     public AuthorDTO saveNewAuthor(AuthorDTO author) {
-
         return authoreMappper.authorToAuthorDTO(authorRepository.save(authoreMappper.authorDTOToAthor(author)));
     }
 

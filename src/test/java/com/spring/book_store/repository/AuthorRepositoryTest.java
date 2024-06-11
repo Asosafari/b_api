@@ -21,6 +21,7 @@ class AuthorRepositoryTest {
 
     @Autowired
     AuthorRepository authorRepository;
+
     Author saveAuthor;
 
     @BeforeEach
@@ -63,10 +64,10 @@ class AuthorRepositoryTest {
 
     @Test
     void testSaveAuthor() {
-        authorRepository.save(saveAuthor);
+        Author author = authorRepository.save(saveAuthor);
         authorRepository.flush();
-        assertThat(saveAuthor).isNotNull();
-        assertThat(saveAuthor.getId()).isNotNull();
+        assertThat(author).isNotNull();
+        assertThat(author.getId()).isNotNull();
 
     }
 }

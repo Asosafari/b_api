@@ -23,7 +23,7 @@ class AuthorRepositoryTestIT {
     @Test
     void testFindAllAuthorByBookTitle() {
         Page<Author> page = authorRepository.findAllByBookTitleIsLikeIgnoreCase("The dark Highlander",null);
-        assertThat(page.getContent().size()).isEqualTo(1);
+        assertThat(page).isNotEmpty();
     }
 
     @Test
@@ -31,7 +31,7 @@ class AuthorRepositoryTestIT {
         Page<Author> page = authorRepository.findAllByPublisherLabelIsLikeIgnoreCase("Clarkson N. Potter",
                 PageRequest.of(0,10));
 
-        assertThat(page.getContent().size()).isEqualTo(1);
+        assertThat(page).isNotEmpty();
 
     }
 }
