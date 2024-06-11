@@ -1,7 +1,7 @@
 package com.spring.book_store.mapper;
 
 import com.spring.book_store.entity.Publisher;
-import com.spring.book_store.model.PublishetDTO;
+import com.spring.book_store.model.PublisherDTO;
 import org.mapstruct.Mapper;
 
 /**
@@ -11,6 +11,6 @@ import org.mapstruct.Mapper;
  */
 @Mapper
 public interface PublisherMapper {
-    Publisher publisherDTOToPublishe(PublishetDTO publishetDTO);
-    PublishetDTO publisherToPublisherDTO(Publisher publisher);
+    Publisher publisherDTOToPublishe(PublisherDTO publisherDTO);
+    PublisherDTO publisherToPublisherDTO(Publisher publisher);
 }

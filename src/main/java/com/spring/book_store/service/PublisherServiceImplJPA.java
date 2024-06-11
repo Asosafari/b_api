@@ -2,7 +2,7 @@ package com.spring.book_store.service;
 
 import com.spring.book_store.entity.Publisher;
 import com.spring.book_store.mapper.PublisherMapper;
-import com.spring.book_store.model.PublishetDTO;
+import com.spring.book_store.model.PublisherDTO;
 import com.spring.book_store.repository.PublisherRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +28,7 @@ public class PublisherServiceImplJPA implements PublisherService {
     private final PublisherMapper publisherMapper;
 
     @Override
-    public Page<PublishetDTO> listOfPublisher(String label, String bookTitle, String authorName,
+    public Page<PublisherDTO> listOfPublisher(String label, String bookTitle, String authorName,
                                               String authorLastName, Integer pageNumber, Integer pageSize) {
         PageRequest pageRequest = BuildPageRequest.build(pageNumber,pageSize,"label");
         Page<Publisher> publisherPage;
@@ -59,25 +59,25 @@ public class PublisherServiceImplJPA implements PublisherService {
     }
 
     @Override
-    public Optional<PublishetDTO> getPublisherById(UUID id) {
+    public Optional<PublisherDTO> getPublisherById(UUID id) {
         return Optional.ofNullable(publisherMapper.publisherToPublisherDTO(publisherRepository.findById(id).orElse(null)));
     }
 
     @Override
-    public PublishetDTO saveNewPublisher(PublishetDTO publishetDTO) {
-        return publisherMapper.publisherToPublisherDTO(publisherRepository.save(publisherMapper.publisherDTOToPublishe(publishetDTO)));
+    public PublisherDTO saveNewPublisher(PublisherDTO publisherDTO) {
+        return publisherMapper.publisherToPublisherDTO(publisherRepository.save(publisherMapper.publisherDTOToPublishe(publisherDTO)));
     }
 
     @Override
-    public Optional<PublishetDTO> updatePublisherById(UUID id, PublishetDTO publishetDTO) {
-        AtomicReference<Optional<PublishetDTO>> atomicReference = new AtomicReference<>();
+    public Optional<PublisherDTO> updatePublisherById(UUID id, PublisherDTO publisherDTO) {
+        AtomicReference<Optional<PublisherDTO>> atomicReference = new AtomicReference<>();
         publisherRepository.findById(id).ifPresentOrElse(foundPublisher ->{
-            foundPublisher.setLabel(publishetDTO.getLabel());
-            foundPublisher.setVersion(publishetDTO.getVersion());
-            foundPublisher.setBooks(publishetDTO.getBooks());
-            foundPublisher.setAuthors(publishetDTO.getAuthors());
-            foundPublisher.setEmail(publishetDTO.getEmail());
-            foundPublisher.setZipCode(publishetDTO.getZipCode());
+            foundPublisher.setLabel(publisherDTO.getLabel());
+            foundPublisher.setVersion(publisherDTO.getVersion());
+            foundPublisher.setBooks(publisherDTO.getBooks());
+            foundPublisher.setAuthors(publisherDTO.getAuthors());
+            foundPublisher.setEmail(publisherDTO.getEmail());
+            foundPublisher.setZipCode(publisherDTO.getZipCode());
             publisherRepository.save(foundPublisher);
         }, () -> atomicReference.set(Optional.empty()));
 
@@ -85,26 +85,26 @@ public class PublisherServiceImplJPA implements PublisherService {
     }
 
     @Override
-    public Optional<PublishetDTO> patchPublisherById(UUID id, PublishetDTO publishetDTO) {
-        AtomicReference<Optional<PublishetDTO>> atomicReference = new AtomicReference<>();
+    public Optional<PublisherDTO> patchPublisherById(UUID id, PublisherDTO publisherDTO) {
+        AtomicReference<Optional<PublisherDTO>> atomicReference = new AtomicReference<>();
         publisherRepository.findById(id).ifPresentOrElse(foundPublisher ->{
-            if (StringUtils.hasText(publishetDTO.getLabel())){
-                foundPublisher.setLabel(publishetDTO.getLabel());
+            if (StringUtils.hasText(publisherDTO.getLabel())){
+                foundPublisher.setLabel(publisherDTO.getLabel());
             }
-            if (StringUtils.hasText(publishetDTO.getEmail())){
-                foundPublisher.setEmail(publishetDTO.getEmail());
+            if (StringUtils.hasText(publisherDTO.getEmail())){
+                foundPublisher.setEmail(publisherDTO.getEmail());
             }
-            if (StringUtils.hasText(publishetDTO.getZipCode())){
-                foundPublisher.setZipCode(publishetDTO.getZipCode());
+            if (StringUtils.hasText(publisherDTO.getZipCode())){
+                foundPublisher.setZipCode(publisherDTO.getZipCode());
             }
-            if (publishetDTO.getBooks() != null){
-                foundPublisher.setBooks(publishetDTO.getBooks());
+            if (publisherDTO.getBooks() != null){
+                foundPublisher.setBooks(publisherDTO.getBooks());
             }
-            if (publishetDTO.getAuthors() != null){
-                foundPublisher.setAuthors(publishetDTO.getAuthors());
+            if (publisherDTO.getAuthors() != null){
+                foundPublisher.setAuthors(publisherDTO.getAuthors());
             }
-            if (publishetDTO.getVersion() != null){
-                foundPublisher.setVersion(publishetDTO.getVersion());
+            if (publisherDTO.getVersion() != null){
+                foundPublisher.setVersion(publisherDTO.getVersion());
             }
             publisherRepository.save(foundPublisher);
         }, () -> atomicReference.set(Optional.empty()));

@@ -17,7 +17,7 @@ import java.util.UUID;
  */
 @Data
 @Builder
-public class PublishetDTO {
+public class PublisherDTO {
 
     private UUID id;
     private String label;
@@ -27,4 +27,5 @@ public class PublishetDTO {
     private Set<Author> authors;
     private LocalDateTime createdDate;
     private LocalDateTime updateDate;
+    private String email;
 }
