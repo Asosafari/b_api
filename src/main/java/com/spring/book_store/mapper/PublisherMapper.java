@@ -11,6 +11,6 @@ import org.mapstruct.Mapper;
  */
 @Mapper
 public interface PublisherMapper {
-    Publisher publisherDTOToPublishe(PublisherDTO publisherDTO);
+    Publisher publisherDTOToPublisher(PublisherDTO publisherDTO);
     PublisherDTO publisherToPublisherDTO(Publisher publisher);
 }

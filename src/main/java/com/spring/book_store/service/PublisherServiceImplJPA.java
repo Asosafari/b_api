@@ -65,7 +65,7 @@ public class PublisherServiceImplJPA implements PublisherService {
 
     @Override
     public PublisherDTO saveNewPublisher(PublisherDTO publisherDTO) {
-        return publisherMapper.publisherToPublisherDTO(publisherRepository.save(publisherMapper.publisherDTOToPublishe(publisherDTO)));
+        return publisherMapper.publisherToPublisherDTO(publisherRepository.save(publisherMapper.publisherDTOToPublisher(publisherDTO)));
     }
 
     @Override
