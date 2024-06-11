@@ -8,12 +8,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Author: ASOU SAFARI
@@ -75,26 +76,56 @@ public class BookServiceImplJPA implements BookService {
 
     @Override
     public Optional<BookDTO> getBookById(UUID id) {
-        return Optional.empty();
+        return Optional.ofNullable(bookMapper.bookToBookDTO(bookRepository.findById(id).orElse(null)));
     }
 
     @Override
     public BookDTO saveNewBook(BookDTO bookDTO) {
-        return null;
-    }
-
-    @Override
-    public boolean deleteBookById(UUID id) {
-        return false;
+        return bookMapper.bookToBookDTO(bookRepository.save(bookMapper.bookDTOToBook(bookDTO)));
     }
 
     @Override
     public Optional<BookDTO> updateBookById(UUID id, BookDTO bookDTO) {
-        return Optional.empty();
+        AtomicReference<Optional<BookDTO>> atomicReference = new AtomicReference<>();
+       bookRepository.findById(id).ifPresentOrElse(foundBook ->{
+                foundBook.setPublisher(bookDTO.getPublisher());
+                foundBook.setAuthors(bookDTO.getAuthors());
+                foundBook.setVersion(bookDTO.getVersion());
+                foundBook.setTitle(bookDTO.getTitle());
+                foundBook.setPrice(bookDTO.getPrice());
+                atomicReference.set(Optional.of(bookMapper.bookToBookDTO(bookRepository.save(foundBook))));
+            }, () -> atomicReference.set(Optional.empty()));
+
+        return atomicReference.get();
+    }
+
+    @Override
+    public boolean deleteBookById(UUID id) {
+        if (bookRepository.existsById(id)){
+            bookRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 
     @Override
     public Optional<BookDTO> patchBookById(UUID id, BookDTO bookDTO) {
-        return Optional.empty();
+        AtomicReference<Optional<BookDTO>> atomicReference = new AtomicReference<>();
+        bookRepository.findById(id).ifPresentOrElse(foundBook ->{
+            if (StringUtils.hasText(bookDTO.getTitle())){
+                foundBook.setTitle(bookDTO.getTitle());
+            }
+            if (bookDTO.getPrice() != null){
+                foundBook.setPrice(bookDTO.getPrice());
+            }
+            if (bookDTO.getPublisher() != null){
+                foundBook.setPublisher(bookDTO.getPublisher());
+            }
+            if (bookDTO.getAuthors() != null){
+                foundBook.setAuthors(bookDTO.getAuthors());
+            }
+
+        }, () -> atomicReference.set(Optional.empty()));
+        return atomicReference.get();
     }
 }
