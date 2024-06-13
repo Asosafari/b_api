@@ -31,21 +31,21 @@ public class AuthorServiceImplJPA implements AuthorService {
 
 
     @Override
-    public Page<AuthorDTO> listOfAuthors(String name, String lastName, Integer pageNumber, Integer pageSize, String title, String label) {
+    public Page<AuthorDTO> listOfAuthors(String name, String lastName, Integer pageNumber, Integer pageSize, String bookTitle, String publisherLabel) {
 
         PageRequest pageRequest = BuildPageRequest.build(pageNumber,pageSize,"name");
 
         Page<Author> authorPage;
-        if (StringUtils.hasText(name) && lastName == null && title == null && label == null){
+        if (StringUtils.hasText(name) && lastName == null && bookTitle == null && publisherLabel == null){
             authorPage = listAuthorByName(name,pageRequest);
-        }else if (StringUtils.hasText(lastName) && name == null && title == null && label == null){
+        }else if (StringUtils.hasText(lastName) && name == null && bookTitle == null && publisherLabel == null){
             authorPage = listAuthorByLastName(lastName,pageRequest);
-        }else if ((StringUtils.hasText(name)) && StringUtils.hasText(lastName) && title == null && label == null){
+        }else if ((StringUtils.hasText(name)) && StringUtils.hasText(lastName) && bookTitle == null && publisherLabel == null){
             authorPage = listAuthorsByNameAndLastName(name,lastName,pageRequest);
-        }else if (StringUtils.hasText(title) && name == null && lastName == null  && label == null){
-            authorPage = listAuthorByBookTitle(title,pageRequest);
-        }else if (StringUtils.hasText(label) && name == null && lastName == null  && title == null){
-            authorPage = listAuthorByPublisherLabel(label,pageRequest);
+        }else if (StringUtils.hasText(bookTitle) && name == null && lastName == null  && publisherLabel == null){
+            authorPage = listAuthorByBookTitle(bookTitle,pageRequest);
+        }else if (StringUtils.hasText(publisherLabel) && name == null && lastName == null  && bookTitle == null){
+            authorPage = listAuthorByPublisherLabel(publisherLabel,pageRequest);
         }
         else {
             authorPage = authorRepository.findAll(pageRequest);
@@ -53,12 +53,12 @@ public class AuthorServiceImplJPA implements AuthorService {
         return authorPage.map(authoreMappper ::authorToAuthorDTO);
     }
 
-    private Page<Author> listAuthorByPublisherLabel(String label, PageRequest pageRequest) {
-        return authorRepository.findAllByPublisherLabelIsLikeIgnoreCase(label,pageRequest);
+    private Page<Author> listAuthorByPublisherLabel(String publisherLabel, PageRequest pageRequest) {
+        return authorRepository.findAllByPublisherLabelIsLikeIgnoreCase(publisherLabel,pageRequest);
     }
 
-    private Page<Author> listAuthorByBookTitle(String title, PageRequest pageRequest) {
-        return authorRepository.findAllByBookTitleIsLikeIgnoreCase(title,pageRequest);
+    private Page<Author> listAuthorByBookTitle(String bookTitle, PageRequest pageRequest) {
+        return authorRepository.findAllByBookTitleIsLikeIgnoreCase(bookTitle,pageRequest);
     }
 
     private Page<Author> listAuthorsByNameAndLastName(String name, String lastName, PageRequest pageRequest) {
