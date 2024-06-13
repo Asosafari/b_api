@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -82,5 +83,16 @@ class AuthorControllerTest {
         mockMvc.perform(get(AuthorController.AUTHOR_PATH_ID,UUID.randomUUID())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void testCreateNewAuthor() throws Exception {
+        given(authorService.saveNewAuthor(any(AuthorDTO.class))).willReturn(authorDTO);
+        mockMvc.perform(post(AuthorController.AUTHOR_PHATH)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(authorDTO)))
+                .andExpect(status().isCreated())
+                .andExpect(header().exists("Location"));
     }
 }
