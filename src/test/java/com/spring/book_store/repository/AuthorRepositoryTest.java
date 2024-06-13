@@ -1,19 +1,19 @@
 package com.spring.book_store.repository;
 
+
 import com.spring.book_store.entity.Author;
-import com.spring.book_store.entity.Book;
-import com.spring.book_store.entity.Publisher;
+
+import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 @DataJpaTest
@@ -36,6 +36,21 @@ class AuthorRepositoryTest {
                 .updateDate(LocalDateTime.now())
                 .build());
 
+    }
+
+    @Test
+    void testBadNameValue() {
+        assertThrows(ConstraintViolationException.class, () ->{
+            Author author = authorRepository.save(Author.builder()
+                            .name("neda aaaaaaaaaaaaaaaaaaaaaaaaa" +
+                                    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+                                    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+                                    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+                                    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+                            .lastName("Pars")
+                    .build());
+            authorRepository.flush();
+        });
     }
 
     @Test
