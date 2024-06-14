@@ -18,6 +18,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import java.util.Collections;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -58,5 +59,15 @@ class BookControllerTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content[0].title").value("The Dark Highlander"));
+    }
+
+    @Test
+    void testGetBookById() throws Exception{
+        given(bookService.getBookById(bookDTO.getId())).willReturn(Optional.of(bookDTO));
+        mockMvc.perform(get(BookController.BOOK_PATH_ID,bookDTO.getId())
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value("The Dark Highlander"));
+
     }
 }
