@@ -70,4 +70,12 @@ class BookControllerTest {
                 .andExpect(jsonPath("$.title").value("The Dark Highlander"));
 
     }
+
+    @Test
+    void testBookNotFound() throws Exception {
+        given(bookService.getBookById(any())).willReturn(Optional.empty());
+        mockMvc.perform(get(BookController.BOOK_PATH_ID,UUID.randomUUID())
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
 }
