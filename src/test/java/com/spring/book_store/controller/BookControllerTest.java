@@ -1,5 +1,6 @@
 package com.spring.book_store.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.book_store.model.BookDTO;
 import com.spring.book_store.service.AuthorService;
 import com.spring.book_store.service.BookService;
@@ -11,6 +12,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -31,6 +33,9 @@ class BookControllerTest {
 
     @MockBean
     BookService bookService;
+
+    @Autowired
+    ObjectMapper objectMapper;
 
 
     BookDTO bookDTO;
@@ -77,5 +82,17 @@ class BookControllerTest {
         mockMvc.perform(get(BookController.BOOK_PATH_ID,UUID.randomUUID())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void testSaveNewBook() throws Exception {
+        given(bookService.saveNewBook(any(BookDTO.class))).willReturn(bookDTO);
+        mockMvc.perform(post(BookController.BOOK_PATH)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(bookDTO)))
+                .andExpect(status().isCreated())
+                .andExpect(header().exists("Location"));
+
     }
 }
