@@ -8,6 +8,8 @@ import com.spring.book_store.service.AuthorService;
 import com.spring.book_store.service.AuthorServiceImplJPA;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -24,7 +26,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.hamcrest.core.Is.is;
-
+import static org.mockito.Mockito.verify;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @WebMvcTest
@@ -38,6 +41,10 @@ class AuthorControllerTest {
 
     @MockBean
     AuthorService authorService;
+
+    @Captor
+    ArgumentCaptor<UUID> uuidArgumentCaptor;
+
 
     private AuthorDTO authorDTO;
 
@@ -94,5 +101,18 @@ class AuthorControllerTest {
                         .content(objectMapper.writeValueAsString(authorDTO)))
                 .andExpect(status().isCreated())
                 .andExpect(header().exists("Location"));
+    }
+
+    @Test
+    void testUpdateAuthor() throws Exception {
+        given(authorService.updateAuthorById(any(),any())).willReturn(Optional.of(authorDTO));
+
+        mockMvc.perform(put(AuthorController.AUTHOR_PATH_ID,authorDTO.getId())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(authorDTO)))
+                .andExpect(status().isNoContent());
+        verify(authorService).updateAuthorById(uuidArgumentCaptor.capture(),any(AuthorDTO.class));
+        assertThat(authorDTO.getId()).isEqualTo(uuidArgumentCaptor.getValue());
     }
 }

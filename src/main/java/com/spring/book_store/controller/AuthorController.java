@@ -52,4 +52,12 @@ public class AuthorController {
         headers.add("Location",AUTHOR_PHATH + "/" + saveAuthorDTO.getId().toString());
         return new ResponseEntity(headers, HttpStatus.CREATED);
     }
+
+    @PutMapping(AUTHOR_PATH_ID)
+    public ResponseEntity updateAuthor(@PathVariable("authorId") UUID id, @RequestBody AuthorDTO authorDTO){
+        if (authorService.updateAuthorById(id,authorDTO).isEmpty()){
+            throw new NotFoundException();
+        }
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
 }
