@@ -67,4 +67,10 @@ public class AuthorController {
         }
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
+
+    @PatchMapping(AUTHOR_PATH_ID)
+    public ResponseEntity patchAuthor(@PathVariable("authorId") UUID authorId, @RequestBody AuthorDTO authorDTO){
+        authorService.patchById(authorId,authorDTO);
+        return new  ResponseEntity(HttpStatus.NO_CONTENT);
+    }
 }

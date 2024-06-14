@@ -45,6 +45,9 @@ class AuthorControllerTest {
     @Captor
     ArgumentCaptor<UUID> uuidArgumentCaptor;
 
+    @Captor
+    ArgumentCaptor<AuthorDTO> authorDTOArgumentCaptor;
+
 
     private AuthorDTO authorDTO;
 
@@ -126,5 +129,22 @@ class AuthorControllerTest {
 
         verify(authorService).deleteAuthoeById(uuidArgumentCaptor.capture());
         assertThat(authorDTO.getId()).isEqualTo(uuidArgumentCaptor.getValue());
+    }
+
+    @Test
+    void testPatchAuthor() throws Exception{
+        AuthorDTO updateAuthor = authorDTO;
+        authorDTO.setLastName("Pars");
+        given(authorService.patchById(any(),any())).willReturn(Optional.of(authorDTO));
+
+        mockMvc.perform(patch(AuthorController.AUTHOR_PATH_ID,authorDTO.getId())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateAuthor)))
+                .andExpect(status().isNoContent());
+
+        verify(authorService).patchById(uuidArgumentCaptor.capture(),authorDTOArgumentCaptor.capture());
+        assertThat(authorDTO.getId()).isEqualTo(uuidArgumentCaptor.getValue());
+        assertThat(updateAuthor.getLastName()).isEqualTo(authorDTOArgumentCaptor.getValue().getLastName());
     }
 }
