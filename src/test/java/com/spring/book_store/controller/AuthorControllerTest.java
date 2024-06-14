@@ -30,7 +30,7 @@ import static org.mockito.Mockito.verify;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-@WebMvcTest
+@WebMvcTest(AuthorController.class)
 class AuthorControllerTest {
 
     @Autowired
@@ -79,7 +79,7 @@ class AuthorControllerTest {
     }
 
     @Test
-    void testGetBeerById() throws Exception {
+    void testGetAuthorById() throws Exception {
         given(authorService.getAuthorById(authorDTO.getId())).willReturn(Optional.of(authorDTO));
         mockMvc.perform(get(AuthorController.AUTHOR_PATH_ID,authorDTO.getId())
                         .accept(MediaType.APPLICATION_JSON))
@@ -88,7 +88,7 @@ class AuthorControllerTest {
     }
 
     @Test
-    void testGetBeerByIdNotFound() throws Exception {
+    void testGetAuthorByIdNotFound() throws Exception {
         given(authorService.getAuthorById(any(UUID.class))).willReturn(Optional.empty());
         mockMvc.perform(get(AuthorController.AUTHOR_PATH_ID,UUID.randomUUID())
                         .accept(MediaType.APPLICATION_JSON))
