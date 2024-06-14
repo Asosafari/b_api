@@ -115,4 +115,16 @@ class AuthorControllerTest {
         verify(authorService).updateAuthorById(uuidArgumentCaptor.capture(),any(AuthorDTO.class));
         assertThat(authorDTO.getId()).isEqualTo(uuidArgumentCaptor.getValue());
     }
+
+    @Test
+    void testDeleteAuthorById() throws Exception {
+        given(authorService.deleteAuthoeById(any())).willReturn(true);
+
+        mockMvc.perform(delete(AuthorController.AUTHOR_PATH_ID,authorDTO.getId())
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+
+        verify(authorService).deleteAuthoeById(uuidArgumentCaptor.capture());
+        assertThat(authorDTO.getId()).isEqualTo(uuidArgumentCaptor.getValue());
+    }
 }

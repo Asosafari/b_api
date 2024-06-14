@@ -41,8 +41,8 @@ public class AuthorController {
     }
 
     @GetMapping(AUTHOR_PATH_ID)
-    public AuthorDTO getAuhtorById(@PathVariable("authorId") UUID id) {
-        return authorService.getAuthorById(id).orElseThrow(NotFoundException :: new);
+    public AuthorDTO getAuhtorById(@PathVariable("authorId") UUID authorId) {
+        return authorService.getAuthorById(authorId).orElseThrow(NotFoundException :: new);
     }
 
     @PostMapping(AUTHOR_PHATH)
@@ -54,8 +54,15 @@ public class AuthorController {
     }
 
     @PutMapping(AUTHOR_PATH_ID)
-    public ResponseEntity updateAuthor(@PathVariable("authorId") UUID id, @RequestBody AuthorDTO authorDTO){
-        if (authorService.updateAuthorById(id,authorDTO).isEmpty()){
+    public ResponseEntity updateAuthor(@PathVariable("authorId") UUID authorId, @RequestBody AuthorDTO authorDTO){
+        if (authorService.updateAuthorById(authorId,authorDTO).isEmpty()){
+            throw new NotFoundException();
+        }
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+    @DeleteMapping(AUTHOR_PATH_ID)
+    public ResponseEntity deleteAuthor(@PathVariable("authorId") UUID authorId){
+        if (!authorService.deleteAuthoeById(authorId)){
             throw new NotFoundException();
         }
         return new ResponseEntity(HttpStatus.NO_CONTENT);
