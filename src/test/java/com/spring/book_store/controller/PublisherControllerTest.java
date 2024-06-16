@@ -5,6 +5,8 @@ import com.spring.book_store.model.PublisherDTO;
 import com.spring.book_store.service.PublisherService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -19,9 +21,11 @@ import java.util.UUID;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+
 
 @WebMvcTest(PublisherController.class)
 class PublisherControllerTest {
@@ -34,6 +38,9 @@ class PublisherControllerTest {
 
     @Autowired
     ObjectMapper objectMapper;
+
+    @Captor
+    ArgumentCaptor<UUID> uuidArgumentCaptor;
 
     PublisherDTO publisherDTO;
 
@@ -94,4 +101,15 @@ class PublisherControllerTest {
                 .andExpect(header().exists("Location"));
     }
 
+    @Test
+    void testDeletePublisher() throws Exception {
+        given(publisherService.deletePublisherById(any())).willReturn(true);
+
+        mockMvc.perform(delete(PublisherController.PUBLISHER_PATH_ID,publisherDTO.getId())
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+
+        verify(publisherService).deletePublisherById(uuidArgumentCaptor.capture());
+        assertThat(publisherDTO.getId()).isEqualTo(uuidArgumentCaptor.getValue());
+    }
 }

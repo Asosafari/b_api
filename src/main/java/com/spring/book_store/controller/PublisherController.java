@@ -48,4 +48,12 @@ public class PublisherController {
         headers.add("Location",PUBLISHER_PATH + "/" + savePublisher.getId());
         return new ResponseEntity(headers, HttpStatus.CREATED);
     }
+
+    @DeleteMapping(PUBLISHER_PATH_ID)
+    public ResponseEntity deletePublisherByID(@PathVariable("publisherId") UUID publisherId){
+        if (!publisherService.deletePublisherById(publisherId)){
+            throw  new NotFoundException();
+        }
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
 }
