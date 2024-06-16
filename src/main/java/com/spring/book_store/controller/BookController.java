@@ -63,4 +63,10 @@ public class BookController {
           }
           return new ResponseEntity(HttpStatus.NO_CONTENT);
      }
+
+     @PatchMapping(BOOK_PATH_ID)
+     public ResponseEntity patchBookById(@PathVariable("bookId") UUID bookId, @RequestBody BookDTO bookDTO){
+          bookService.patchBookById(bookId,bookDTO);
+          return new ResponseEntity(HttpStatus.NO_CONTENT);
+     }
 }

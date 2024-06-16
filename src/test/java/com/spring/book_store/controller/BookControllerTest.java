@@ -42,7 +42,10 @@ class BookControllerTest {
     ObjectMapper objectMapper;
 
     @Captor
-    ArgumentCaptor<UUID> uuidArgumentCaptord;
+    ArgumentCaptor<UUID> uuidArgumentCaptor;
+
+    @Captor
+    ArgumentCaptor<BookDTO> bookDTOArgumentCaptor;
     BookDTO bookDTO;
 
 
@@ -108,8 +111,8 @@ class BookControllerTest {
         mockMvc.perform(delete(BookController.BOOK_PATH_ID,bookDTO.getId())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
-        verify(bookService).deleteBookById(uuidArgumentCaptord.capture());
-        assertThat(bookDTO.getId()).isEqualTo(uuidArgumentCaptord.getValue());
+        verify(bookService).deleteBookById(uuidArgumentCaptor.capture());
+        assertThat(bookDTO.getId()).isEqualTo(uuidArgumentCaptor.getValue());
     }
 
     @Test
@@ -121,7 +124,24 @@ class BookControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(bookDTO)))
                 .andExpect(status().isNoContent());
-        verify(bookService).updateBookById(uuidArgumentCaptord.capture(),any(BookDTO.class));
-        assertThat(bookDTO.getId()).isEqualTo(uuidArgumentCaptord.getValue());
+        verify(bookService).updateBookById(uuidArgumentCaptor.capture(),any(BookDTO.class));
+        assertThat(bookDTO.getId()).isEqualTo(uuidArgumentCaptor.getValue());
+    }
+
+    @Test
+    void testPatchBook() throws Exception {
+        given(bookService.patchBookById(any(),any())).willReturn(Optional.of(bookDTO));
+        BookDTO updateBook = bookDTO;
+        updateBook.setTitle("Love again");
+
+        mockMvc.perform(patch(BookController.BOOK_PATH_ID,bookDTO.getId())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateBook)))
+                .andExpect(status().isNoContent());
+
+        verify(bookService).patchBookById(uuidArgumentCaptor.capture(),bookDTOArgumentCaptor.capture());
+        assertThat(bookDTO.getId()).isEqualTo(uuidArgumentCaptor.getValue());
+        assertThat(updateBook.getTitle()).isEqualTo(bookDTOArgumentCaptor.getValue().getTitle());
     }
 }
