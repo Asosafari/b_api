@@ -112,4 +112,18 @@ class PublisherControllerTest {
         verify(publisherService).deletePublisherById(uuidArgumentCaptor.capture());
         assertThat(publisherDTO.getId()).isEqualTo(uuidArgumentCaptor.getValue());
     }
+
+    @Test
+    void testUpdatePublisher() throws Exception {
+        given(publisherService.updatePublisherById(any(),any())).willReturn(Optional.of(publisherDTO));
+
+        mockMvc.perform(put(PublisherController.PUBLISHER_PATH_ID,publisherDTO.getId())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(publisherDTO)))
+                .andExpect(status().isNoContent());
+
+        verify(publisherService).updatePublisherById(uuidArgumentCaptor.capture(),any(PublisherDTO.class));
+        assertThat(publisherDTO.getId()).isEqualTo(uuidArgumentCaptor.getValue());
+    }
 }

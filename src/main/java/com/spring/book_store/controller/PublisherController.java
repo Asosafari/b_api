@@ -56,4 +56,12 @@ public class PublisherController {
         }
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
+
+    @PutMapping(PUBLISHER_PATH_ID)
+    public ResponseEntity updatePublisherById(@PathVariable("publisherId") UUID publisherId, @RequestBody PublisherDTO publisherDTO){
+        if (publisherService.updatePublisherById(publisherId,publisherDTO).isEmpty()){
+            throw new NotFoundException();
+        }
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
 }
