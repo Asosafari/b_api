@@ -6,6 +6,8 @@ import com.spring.book_store.service.AuthorService;
 import com.spring.book_store.service.BookService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -24,6 +26,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.mockito.Mockito.verify;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @WebMvcTest(BookController.class)
 class BookControllerTest {
@@ -37,7 +41,8 @@ class BookControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
-
+    @Captor
+    ArgumentCaptor<UUID> uuidArgumentCaptord;
     BookDTO bookDTO;
 
     @BeforeEach
@@ -94,5 +99,15 @@ class BookControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(header().exists("Location"));
 
+    }
+
+    @Test
+    void testDeleteBook() throws Exception {
+        given(bookService.deleteBookById(bookDTO.getId())).willReturn(true);
+        mockMvc.perform(delete(BookController.BOOK_PATH_ID,bookDTO.getId())
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+        verify(bookService).deleteBookById(uuidArgumentCaptord.capture());
+        assertThat(bookDTO.getId()).isEqualTo(uuidArgumentCaptord.getValue());
     }
 }
