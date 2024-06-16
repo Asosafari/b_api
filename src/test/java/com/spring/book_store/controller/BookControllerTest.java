@@ -45,6 +45,7 @@ class BookControllerTest {
     ArgumentCaptor<UUID> uuidArgumentCaptord;
     BookDTO bookDTO;
 
+
     @BeforeEach
     void setUp() {
         bookDTO = BookDTO.builder()
@@ -103,11 +104,24 @@ class BookControllerTest {
 
     @Test
     void testDeleteBook() throws Exception {
-        given(bookService.deleteBookById(bookDTO.getId())).willReturn(true);
+        given(bookService.deleteBookById(any())).willReturn(true);
         mockMvc.perform(delete(BookController.BOOK_PATH_ID,bookDTO.getId())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
         verify(bookService).deleteBookById(uuidArgumentCaptord.capture());
+        assertThat(bookDTO.getId()).isEqualTo(uuidArgumentCaptord.getValue());
+    }
+
+    @Test
+    void testUpdateBook() throws  Exception {
+        given(bookService.updateBookById(any(),any())).willReturn(Optional.of(bookDTO));
+
+        mockMvc.perform(put(BookController.BOOK_PATH_ID,bookDTO.getId())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(bookDTO)))
+                .andExpect(status().isNoContent());
+        verify(bookService).updateBookById(uuidArgumentCaptord.capture(),any(BookDTO.class));
         assertThat(bookDTO.getId()).isEqualTo(uuidArgumentCaptord.getValue());
     }
 }
