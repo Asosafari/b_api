@@ -42,6 +42,9 @@ class PublisherControllerTest {
     @Captor
     ArgumentCaptor<UUID> uuidArgumentCaptor;
 
+    @Captor
+    ArgumentCaptor<PublisherDTO> publisherDTOArgumentCaptor;
+
     PublisherDTO publisherDTO;
 
     @BeforeEach
@@ -125,5 +128,21 @@ class PublisherControllerTest {
 
         verify(publisherService).updatePublisherById(uuidArgumentCaptor.capture(),any(PublisherDTO.class));
         assertThat(publisherDTO.getId()).isEqualTo(uuidArgumentCaptor.getValue());
+    }
+
+    @Test
+    void testPatchPublisher() throws Exception {
+        given(publisherService.patchPublisherById(any(),any())).willReturn(Optional.of(publisherDTO));
+        publisherDTO.setLabel("Kaj");
+
+        mockMvc.perform(patch(PublisherController.PUBLISHER_PATH_ID,publisherDTO.getId())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(publisherDTO)))
+                .andExpect(status().isNoContent());
+
+        verify(publisherService).patchPublisherById(uuidArgumentCaptor.capture(),publisherDTOArgumentCaptor.capture());
+        assertThat(publisherDTO.getId()).isEqualTo(uuidArgumentCaptor.getValue());
+        assertThat(publisherDTO.getLabel()).isEqualTo(publisherDTOArgumentCaptor.getValue().getLabel());
     }
 }

@@ -64,4 +64,10 @@ public class PublisherController {
         }
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
+
+    @PatchMapping(PUBLISHER_PATH_ID)
+    public ResponseEntity patchPublisherById(@PathVariable("publisherId") UUID publisherId, @RequestBody PublisherDTO publisherDTO){
+        publisherService.patchPublisherById(publisherId,publisherDTO);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
 }
