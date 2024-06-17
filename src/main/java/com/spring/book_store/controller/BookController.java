@@ -22,7 +22,7 @@ import java.util.UUID;
 @RestController
 public class BookController {
      private final BookService bookService;
-     public static final String BOOK_PATH = "/api/vi/book";
+     public static final String BOOK_PATH = "/api/v1/book";
      public static final String BOOK_PATH_ID = BOOK_PATH + "/{bookId}";
 
      @GetMapping(BOOK_PATH)
