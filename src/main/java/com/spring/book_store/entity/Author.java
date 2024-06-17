@@ -32,8 +32,8 @@ import java.util.UUID;
 public class Author {
     @Id
     @UuidGenerator
-   // @JdbcTypeCode(SqlTypes.CHAR)
-    @Column(length = 36, columnDefinition = "varchar",updatable = false,nullable = false)
+    @JdbcTypeCode(SqlTypes.CHAR)
+    @Column(length = 36, columnDefinition = "varchar(36)",updatable = false,nullable = false)
     private UUID id;
 
     @NotBlank
@@ -48,7 +48,7 @@ public class Author {
     @Column(length = 50)
     private String lastName;
 
-    @Email()
+    @Email(regexp = ".+[@].+[\\.].+")
     String email;
 
 

@@ -33,8 +33,8 @@ public class Publisher {
 
     @Id
     @UuidGenerator
-    //@JdbcTypeCode(SqlTypes.CHAR)
-    @Column(length = 36, columnDefinition = "varchar",updatable = false,nullable = false)
+    @JdbcTypeCode(SqlTypes.CHAR)
+    @Column(length = 36, columnDefinition = "varchar(36)",updatable = false,nullable = false)
     private UUID id;
 
     @NotBlank
@@ -49,7 +49,7 @@ public class Publisher {
     @Column(length = 50)
     private String zipCode;
 
-    @Email()
+    @Email(regexp = ".+[@].+[\\.].+")
     String email;
 
     @Version
