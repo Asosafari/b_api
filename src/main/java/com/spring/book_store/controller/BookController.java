@@ -26,12 +26,12 @@ public class BookController {
      public static final String BOOK_PATH_ID = BOOK_PATH + "/{bookId}";
 
      @GetMapping(BOOK_PATH)
-     public Page<BookDTO> listBooks(@RequestParam String title,
-                                    @RequestParam String authorName,
-                                    @RequestParam String authorLastName,
-                                    @RequestParam String publisherLabel,
-                                    @RequestParam Integer pageNumber,
-                                    @RequestParam Integer pageSize){
+     public Page<BookDTO> listBooks(@RequestParam(required = false) String title,
+                                    @RequestParam(required = false) String authorName,
+                                    @RequestParam(required = false) String authorLastName,
+                                    @RequestParam(required = false) String publisherLabel,
+                                    @RequestParam(required = false) Integer pageNumber,
+                                    @RequestParam(required = false) Integer pageSize){
         return bookService.listOfBooks(title,authorName,authorLastName,publisherLabel,pageNumber,pageSize);
      }
 

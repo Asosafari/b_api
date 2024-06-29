@@ -27,12 +27,12 @@ public class PublisherController {
     public static final String PUBLISHER_PATH_ID = PUBLISHER_PATH + "/{publisherId}";
 
     @GetMapping(PUBLISHER_PATH)
-    public Page<PublisherDTO> listPublisher(@RequestParam String label,
-                                            @RequestParam String bookTitle,
-                                            @RequestParam String authorName,
-                                            @RequestParam String authorLastName,
-                                            @RequestParam Integer pageNumber,
-                                            @RequestParam Integer pageSize){
+    public Page<PublisherDTO> listPublisher(@RequestParam(required = false) String label,
+                                            @RequestParam(required = false) String bookTitle,
+                                            @RequestParam(required = false) String authorName,
+                                            @RequestParam(required = false) String authorLastName,
+                                            @RequestParam(required = false) Integer pageNumber,
+                                            @RequestParam(required = false) Integer pageSize){
       return publisherService.listOfPublisher(label,bookTitle,authorName,authorLastName,pageNumber,pageSize);
     }
 

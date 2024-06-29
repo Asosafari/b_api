@@ -30,12 +30,12 @@ public class AuthorController {
     public static final String AUTHOR_PATH_ID = AUTHOR_PHATH + "/{authorId}";
 
     @GetMapping(AUTHOR_PHATH)
-    public Page<AuthorDTO> listAuthors(@RequestParam String name,
-                                       @RequestParam String lastName,
-                                       @RequestParam Integer pageNumber,
-                                       @RequestParam Integer pageSize,
-                                       @RequestParam String bookTitle,
-                                       @RequestParam String publisherLabel) {
+    public Page<AuthorDTO> listAuthors(@RequestParam(required = false) String name,
+                                       @RequestParam(required = false) String lastName,
+                                       @RequestParam(required = false) Integer pageNumber,
+                                       @RequestParam(required = false) Integer pageSize,
+                                       @RequestParam(required = false) String bookTitle,
+                                       @RequestParam(required = false) String publisherLabel) {
 
         return authorService.listOfAuthors(name, lastName, pageNumber, pageSize, bookTitle, publisherLabel);
     }
