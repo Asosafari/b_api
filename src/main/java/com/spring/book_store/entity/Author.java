@@ -1,5 +1,6 @@
 package com.spring.book_store.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -25,11 +26,12 @@ import java.util.UUID;
  */
 @Setter
 @Getter
-@AllArgsConstructor
 @RequiredArgsConstructor
+@AllArgsConstructor
 @Builder
 @Entity
 public class Author {
+
     @Id
     @UuidGenerator
     @JdbcTypeCode(SqlTypes.CHAR)
@@ -56,28 +58,25 @@ public class Author {
     private Integer version;
 
     @Builder.Default
-    @ManyToMany(mappedBy = "authors")
+    @OneToMany(mappedBy = "author")
     private Set<Book> books = new HashSet<>();
 
     @Builder.Default
     @ManyToMany
-    @JoinTable(name = "author_publisher"
-            ,joinColumns = @JoinColumn(name = "author_id")
-            ,inverseJoinColumns = @JoinColumn(name = "publisher_id"))
+    @JoinTable(name = "author_publisher",
+            joinColumns = @JoinColumn(name = "author_id"),inverseJoinColumns = @JoinColumn(name = "publisher_id"))
+    @JsonManagedReference
     private Set<Publisher> publishers = new HashSet<>();
 
 
-    /*
-    add and remove in memory
-    public -> testable
-   */
 
     public void addPublisher(Publisher publisher){
-        this.publishers.add(publisher);
+        this.getPublishers().add(publisher);
         publisher.getAuthors().add(this);
     }
+
     public void removePublisher(Publisher publisher){
-        this.publishers.remove(publisher);
+        this.getPublishers().remove(publisher);
         publisher.getAuthors().remove(this);
     }
 

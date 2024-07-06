@@ -1,5 +1,8 @@
 package com.spring.book_store.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.spring.book_store.entity.Author;
 import com.spring.book_store.entity.Publisher;
 
@@ -20,13 +23,24 @@ import java.util.UUID;
 @Builder
 public class BookDTO {
 
+    @JsonIgnore
     private UUID id;
     private String title;
+
+    @JsonIgnore
     private Integer version;
+
+    @JsonBackReference
     private Publisher publisher;
-    private Set<Author> authors;
+
+    @JsonBackReference
+    private Author author;
     private BigDecimal price;
+
+    @JsonIgnore
     private LocalDateTime createdDate;
+
+    @JsonIgnore
     private LocalDateTime updateDate;
 
 

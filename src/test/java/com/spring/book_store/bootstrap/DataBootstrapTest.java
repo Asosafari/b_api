@@ -43,12 +43,10 @@ class DataBootstrapTest {
 
     @Test
     void testRun()  throws  Exception {
-
         dataBootstrap.run((String) null);
         assertThat(publisherRepository.count()).isEqualTo(1);
         assertThat(authorRepository.count()).isEqualTo(1);
         assertThat(bookRepository.count()).isEqualTo(1);
-
 
     }
 }

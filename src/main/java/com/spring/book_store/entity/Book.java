@@ -1,4 +1,5 @@
 package com.spring.book_store.entity;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -22,6 +23,7 @@ import java.util.UUID;
  * Date:5/23/24
  * Time:8:28 PM
  */
+@ToString
 @Setter
 @Getter
 @RequiredArgsConstructor
@@ -30,13 +32,13 @@ import java.util.UUID;
 public class Book {
 
     public Book(UUID id, String title, Integer version, BigDecimal price, Publisher publisher
-            , Set<Author> authors, LocalDateTime createdDate, LocalDateTime updateDate) {
+            ,Author author, LocalDateTime createdDate, LocalDateTime updateDate) {
         this.id = id;
         this.title = title;
         this.version = version;
         this.price = price;
         this.setPublisher(publisher);
-        this.authors = authors;
+        this.setAuthor(author);
         this.createdDate = createdDate;
         this.updateDate = updateDate;
     }
@@ -67,27 +69,13 @@ public class Book {
         publisher.getBooks().add(this);
     }
 
-    @Builder.Default
-    @ManyToMany
-    @JoinTable(name = "author_book"
-            , joinColumns = @JoinColumn(name = "book_id")
-            ,inverseJoinColumns = @JoinColumn(name = "author_id"))
-    private Set<Author> authors = new HashSet<>();
+    @ManyToOne
+    private Author author;
 
-    /*
-    add and remove in memory
-    public -> testable
-     */
-    public void addAuthor(Author author){
-        this.authors.add(author);
+    public void setAuthor(Author author){
+        this.author = author;
         author.getBooks().add(this);
     }
-
-    private void removeAuthor(Author author){
-        this.authors.remove(author);
-        author.getBooks().remove(this);
-    }
-
 
     @CreationTimestamp
     @Column(updatable = false)

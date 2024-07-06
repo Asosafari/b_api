@@ -35,8 +35,6 @@ public class DataBootstrap implements CommandLineRunner {
       load();
     }
 
-
-
     private void load() {
         if (authorRepository.count() == 0 && publisherRepository.count() == 0 && bookRepository.count()== 0){
             Publisher publisher = Publisher.builder()
@@ -48,6 +46,7 @@ public class DataBootstrap implements CommandLineRunner {
                     .createdDate(LocalDateTime.now())
                     .updateDate(LocalDateTime.now())
                     .build();
+            Publisher savePublisher =  publisherRepository.save(publisher);
 
             Author author = Author.builder()
                     .id(UUID.randomUUID())
@@ -58,8 +57,6 @@ public class DataBootstrap implements CommandLineRunner {
                     .createdDate(LocalDateTime.now())
                     .updateDate(LocalDateTime.now())
                     .build();
-           Publisher savePublisher =  publisherRepository.save(publisher);
-
             author.addPublisher(savePublisher);
 
             Author saveAuthor = authorRepository.save(author);
@@ -70,11 +67,11 @@ public class DataBootstrap implements CommandLineRunner {
                     .price(new BigDecimal("12.99"))
                     .version(1)
                     .publisher(savePublisher)
+                    .author(saveAuthor)
                     .createdDate(LocalDateTime.now())
                     .updateDate(LocalDateTime.now())
                     .build();
 
-            book.addAuthor(saveAuthor);
             bookRepository.save(book);
 
         }

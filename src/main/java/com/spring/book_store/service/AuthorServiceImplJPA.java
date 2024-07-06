@@ -93,7 +93,7 @@ public class AuthorServiceImplJPA implements AuthorService {
             foundAuthor.setLastName(authorDTO.getLastName());
             foundAuthor.setEmail(authorDTO.getEmail());
             foundAuthor.setBooks(authorDTO.getBooks());
-            foundAuthor.setPublishers(authorDTO.getPublishers());
+            foundAuthor.addPublisher(authorDTO.getPublisher());
             foundAuthor.setVersion(authorDTO.getVersion());
             atomicReference.set(Optional.of(authoreMappper.authorToAuthorDTO(authorRepository.save(foundAuthor))));
         } , () -> atomicReference.set(Optional.empty())
@@ -123,8 +123,8 @@ public class AuthorServiceImplJPA implements AuthorService {
             if (StringUtils.hasText(authorDTO.getEmail())){
                 foundAuthor.setEmail(authorDTO.getEmail());
             }
-            if (authorDTO.getPublishers() != null){
-                foundAuthor.setPublishers(authorDTO.getPublishers());
+            if (authorDTO.getPublisher() != null){
+                foundAuthor.addPublisher(authorDTO.getPublisher());
             }
             if (authorDTO.getBooks() != null){
                 foundAuthor.setBooks(authorDTO.getBooks());

@@ -17,13 +17,13 @@ public interface BookRepository extends JpaRepository<Book,UUID> {
     @Query("SELECT b FROM Book b JOIN b.publisher p WHERE LOWER(p.label) LIKE LOWER(CONCAT('%', :label, '%'))")
     Page<Book> findAllByPublisherLabelIsLikeIgnoreCase(@Param("label") String publisherLabel, Pageable pageable);
 
-    @Query("SELECT b FROM Book b JOIN b.authors a WHERE LOWER(a.name) LIKE LOWER(CONCAT('%', :name, '%'))")
+    @Query("SELECT b FROM Book b JOIN b.author a WHERE LOWER(a.name) LIKE LOWER(CONCAT('%', :name, '%'))")
     Page<Book> findAllByAuthorNameIsLikeIgnoreCase(@Param("name") String authorName,Pageable pageable);
 
-    @Query("SELECT b FROM Book b JOIN b.authors a WHERE LOWER(a.lastName) LIKE LOWER(CONCAT('%', lastName, '%'))")
+    @Query("SELECT b FROM Book b JOIN b.author a WHERE LOWER(a.lastName) LIKE LOWER(CONCAT('%', lastName, '%'))")
     Page<Book> findAllByAuthorLastNameIsLikeIgnoreCase(@Param("lastName") String authorLastName, Pageable pageable);
 
-    @Query("SELECT b FROM Book b JOIN b.authors a WHERE LOWER(a.name) LIKE LOWER(CONCAT('%', :name, '%')) " +
+    @Query("SELECT b FROM Book b JOIN b.author a WHERE LOWER(a.name) LIKE LOWER(CONCAT('%', :name, '%')) " +
             "AND LOWER(a.lastName) LIKE LOWER(CONCAT('%', :lastName, '%'))")
     Page<Book> findAllByAuthorNameIsLikeIgnoreCaseAndAuthorLastNameIsLikeIgnoreCase(
             @Param("name") String name, @Param("lastName") String lastName, Pageable pageable);
