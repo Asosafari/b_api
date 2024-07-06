@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.spring</groupId>
-	<artifactId>book-store</artifactId>
+	<artifactId>b_api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>book-store</name>
 	<description>Demo project for Spring Boot</description>
