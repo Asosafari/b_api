@@ -1,3 +1,4 @@
+
 package com.spring.book_store.service;
 
 import com.spring.book_store.entity.Publisher;
@@ -75,7 +76,6 @@ public class PublisherServiceImplJPA implements PublisherService {
             foundPublisher.setLabel(publisherDTO.getLabel());
             foundPublisher.setVersion(publisherDTO.getVersion());
             foundPublisher.setBooks(publisherDTO.getBooks());
-            foundPublisher.setAuthors(publisherDTO.getAuthors());
             foundPublisher.setEmail(publisherDTO.getEmail());
             foundPublisher.setZipCode(publisherDTO.getZipCode());
             publisherRepository.save(foundPublisher);
@@ -99,9 +99,6 @@ public class PublisherServiceImplJPA implements PublisherService {
             }
             if (publisherDTO.getBooks() != null){
                 foundPublisher.setBooks(publisherDTO.getBooks());
-            }
-            if (publisherDTO.getAuthors() != null){
-                foundPublisher.setAuthors(publisherDTO.getAuthors());
             }
             if (publisherDTO.getVersion() != null){
                 foundPublisher.setVersion(publisherDTO.getVersion());

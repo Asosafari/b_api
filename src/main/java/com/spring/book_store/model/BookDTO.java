@@ -9,6 +9,7 @@ import com.spring.book_store.entity.Publisher;
 import lombok.Builder;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -23,24 +24,17 @@ import java.util.UUID;
 @Builder
 public class BookDTO {
 
-    @JsonIgnore
     private UUID id;
     private String title;
-
-    @JsonIgnore
     private Integer version;
-
-    @JsonBackReference
-    private Publisher publisher;
-
-    @JsonBackReference
+    private String publisherLabel;
+    private String authorFullName;
+    @JsonIgnore
     private Author author;
+    @JsonIgnore
+    private Publisher publisher;
     private BigDecimal price;
-
-    @JsonIgnore
     private LocalDateTime createdDate;
-
-    @JsonIgnore
     private LocalDateTime updateDate;
 
 

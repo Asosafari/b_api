@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -40,7 +41,6 @@ class AuthorRepositoryTest {
                 .id(UUID.randomUUID())
                 .version(1)
                 .name("Ali")
-                .publisher(savePublisher)
                 .lastName("Rad")
                 .email("ali.rad@example.com")
                 .createdDate(LocalDateTime.now())

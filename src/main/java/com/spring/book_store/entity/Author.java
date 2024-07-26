@@ -1,6 +1,8 @@
 package com.spring.book_store.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -12,8 +14,9 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.type.SqlTypes;
-import org.springframework.expression.spel.ast.TypeCode;
+import org.hibernate.validator.constraints.UniqueElements;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -30,7 +33,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @Entity
-public class Author {
+public class Author implements Serializable {
 
     @Id
     @UuidGenerator
@@ -50,6 +53,7 @@ public class Author {
     @Column(length = 50)
     private String lastName;
 
+    @Column(unique = true)
     @Email(regexp = ".+[@].+[\\.].+")
     String email;
 
@@ -60,25 +64,6 @@ public class Author {
     @Builder.Default
     @OneToMany(mappedBy = "author")
     private Set<Book> books = new HashSet<>();
-
-    @Builder.Default
-    @ManyToMany
-    @JoinTable(name = "author_publisher",
-            joinColumns = @JoinColumn(name = "author_id"),inverseJoinColumns = @JoinColumn(name = "publisher_id"))
-    @JsonManagedReference
-    private Set<Publisher> publishers = new HashSet<>();
-
-
-
-    public void addPublisher(Publisher publisher){
-        this.getPublishers().add(publisher);
-        publisher.getAuthors().add(this);
-    }
-
-    public void removePublisher(Publisher publisher){
-        this.getPublishers().remove(publisher);
-        publisher.getAuthors().remove(this);
-    }
 
     @CreationTimestamp
     @Column(nullable = false)

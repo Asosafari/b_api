@@ -57,7 +57,6 @@ public class DataBootstrap implements CommandLineRunner {
                     .createdDate(LocalDateTime.now())
                     .updateDate(LocalDateTime.now())
                     .build();
-            author.addPublisher(savePublisher);
 
             Author saveAuthor = authorRepository.save(author);
 

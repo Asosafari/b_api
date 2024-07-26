@@ -26,7 +26,7 @@ import java.util.UUID;
 @RestController
 public class AuthorController {
     private final AuthorService authorService;
-    public static final String AUTHOR_PHATH = "/api/v1/author";
+    public static final String AUTHOR_PHATH = "/api/v1/authors";
     public static final String AUTHOR_PATH_ID = AUTHOR_PHATH + "/{authorId}";
 
     @GetMapping(AUTHOR_PHATH)

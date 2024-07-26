@@ -1,6 +1,8 @@
 package com.spring.book_store.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -13,6 +15,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.type.SqlTypes;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -30,7 +33,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Entity
-public class Publisher {
+public class Publisher implements Serializable {
 
     @Id
     @UuidGenerator
@@ -50,6 +53,7 @@ public class Publisher {
     @Column(length = 50)
     private String zipCode;
 
+    @Column(unique = true)
     @Email(regexp = ".+[@].+[\\.].+")
     String email;
 
@@ -60,16 +64,11 @@ public class Publisher {
     @OneToMany(mappedBy = "publisher")
     private Set<Book> books = new HashSet<>();
 
-    @Builder.Default
-    @ManyToMany(mappedBy = "publishers")
-    private Set<Author> authors = new HashSet<>();
-
     @CreationTimestamp
     @Column(nullable = false)
     private LocalDateTime createdDate;
 
     @UpdateTimestamp
     private LocalDateTime updateDate;
-
 
 }
