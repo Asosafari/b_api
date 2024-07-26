@@ -22,6 +22,7 @@ public interface AuthorRepository extends JpaRepository<Author,UUID> {
     @Query("SELECT a FROM Author a JOIN a.books b WHERE LOWER(b.title) LIKE LOWER(CONCAT('%', :title, '%'))")
     Page<Author> findAllByBookTitleIsLikeIgnoreCase(@Param("title") String title, Pageable pageable);
 
-    @Query("SELECT a FROM Author a JOIN a.publishers p WHERE LOWER(p.label) LIKE LOWER(CONCAT('%', :label, '%'))")
+    @Query("SELECT DISTINCT a FROM Author a JOIN a.books b JOIN b.publisher p" +
+            " WHERE LOWER(p.label) LIKE LOWER(CONCAT('%', :label, '%'))")
     Page<Author> findAllByPublisherLabelIsLikeIgnoreCase(@Param("label") String label, Pageable pageable);
 }

@@ -2,7 +2,7 @@
    drop table if exists publisher;
    drop table if exists author;
    drop table if exists book;
-   drop table if exists author_publisher;
+
 
 
  create table publisher (
@@ -13,7 +13,8 @@
                label varchar(50) not null,
                zip_code varchar(50) not null,
                email varchar(255) not null,
-               primary key (id)
+               primary key (id),
+               CONSTRAINT UC_Publisher UNIQUE (id,email)
      ) engine=InnoDB;
 
    create table author (
@@ -23,8 +24,9 @@
              id varchar(36) not null,
              name varchar(50) not null,
              last_name varchar(50) not null,
-             email varchar(255) not null,
-             primary key (id)
+             email varchar(255) not null ,
+             primary key (id),
+             CONSTRAINT UC_Author UNIQUE (id,email)
      )engine=InnoDB;
 
 
@@ -43,12 +45,5 @@
      )engine=InnoDB;
 
 
-     create table author_publisher (
-     author_id varchar(36) not null,
-     publisher_id varchar(36) not null,
-          primary key(author_id,publisher_id),
-              constraint pc_publisher_id_fk FOREIGN KEY (publisher_id) references publisher (id),
-              constraint pc_author_id_p_fk FOREIGN KEY (author_id) references author (id)
-     )engine=InnoDB;
 
 

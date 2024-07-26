@@ -3,6 +3,7 @@ package com.spring.book_store.mapper;
 import com.spring.book_store.entity.Publisher;
 import com.spring.book_store.model.PublisherDTO;
 import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
 /**
  * Author: ASOU SAFARI
@@ -11,6 +12,7 @@ import org.mapstruct.Mapper;
  */
 @Mapper
 public interface PublisherMapper {
+    PublisherMapper INSTANCE = Mappers.getMapper(PublisherMapper.class);
     Publisher publisherDTOToPublisher(PublisherDTO publisherDTO);
     PublisherDTO publisherToPublisherDTO(Publisher publisher);
 }
