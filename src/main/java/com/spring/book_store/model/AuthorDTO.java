@@ -9,6 +9,7 @@ import com.spring.book_store.entity.Publisher;
 import lombok.Builder;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
@@ -20,30 +21,13 @@ import java.util.UUID;
  */
 @Data
 @Builder
-public class AuthorDTO {
+public class AuthorDTO  {
 
-    @JsonIgnore
     private UUID id;
-
     private String name;
     private String lastName;
-
-    @JsonIgnore
     private Integer version;
-
     @JsonBackReference
     private Set<Book> books;
-
-
-
-    @JsonBackReference
-    private Publisher publisher;
-
-    @JsonIgnore
-    private LocalDateTime createdDate;
-
-    @JsonIgnore
-    private LocalDateTime updateDate;
-
     private String email;
 }

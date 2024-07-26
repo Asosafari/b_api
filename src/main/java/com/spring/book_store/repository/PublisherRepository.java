@@ -13,10 +13,13 @@ public interface PublisherRepository extends JpaRepository<Publisher,UUID> {
 
     Page<Publisher> findAllByLabelIsLikeIgnoreCase(String label, Pageable pageable);
 
-    @Query("SELECT p FROM Publisher p JOIN p.authors a WHERE LOWER(a.name) LIKE LOWER(CONCAT('%', :name, '%')) " +
-            "AND LOWER(a.lastName) LIKE LOWER(CONCAT('%', :lastName, '%'))")
+    @Query("SELECT DISTINCT p FROM Publisher p JOIN p.books b JOIN b.author a " +
+            "WHERE LOWER(a.name) LIKE LOWER(CONCAT('%', :name, '%')) AND LOWER(a.lastName) " +
+            "LIKE LOWER(CONCAT('%', :lastName, '%'))")
     Page<Publisher> findAllByAuthorNameIsLikeIgnoreCaseAndAuthorLastNameIsLikeIgnoreCase(
             @Param("name") String name, @Param("lastName") String lastName, Pageable pageable);
+
+
     @Query("SELECT p FROM Publisher p JOIN p.books b WHERE LOWER(b.title) LIKE LOWER(CONCAT('%', :title, '%'))")
     Page<Publisher> findAllByBookTitleIsLikeIgnoreCase(@Param("title") String bookTitle, Pageable pageable);
 }

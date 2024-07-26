@@ -88,9 +88,11 @@ public class BookServiceImplJPA implements BookService {
     public Optional<BookDTO> updateBookById(UUID id, BookDTO bookDTO) {
         AtomicReference<Optional<BookDTO>> atomicReference = new AtomicReference<>();
        bookRepository.findById(id).ifPresentOrElse(foundBook ->{
+                foundBook.setPublisher(foundBook.getPublisher());
+                foundBook.setAuthor(foundBook.getAuthor());
+                foundBook.setVersion(bookDTO.getVersion());
                 foundBook.setPublisher(bookDTO.getPublisher());
                 foundBook.setAuthor(bookDTO.getAuthor());
-                foundBook.setVersion(bookDTO.getVersion());
                 foundBook.setTitle(bookDTO.getTitle());
                 foundBook.setPrice(bookDTO.getPrice());
                 atomicReference.set(Optional.of(bookMapper.bookToBookDTO(bookRepository.save(foundBook))));
@@ -124,7 +126,6 @@ public class BookServiceImplJPA implements BookService {
             if (bookDTO.getAuthor() != null){
                 foundBook.setAuthor(bookDTO.getAuthor());
             }
-
         }, () -> atomicReference.set(Optional.empty()));
         return atomicReference.get();
     }

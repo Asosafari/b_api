@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -80,7 +79,7 @@ public class AuthorServiceImplJPA implements AuthorService {
 
     @Override
     public AuthorDTO saveNewAuthor(AuthorDTO author) {
-        return authoreMappper.authorToAuthorDTO(authorRepository.save(authoreMappper.authorDTOToAthor(author)));
+        return authoreMappper.authorToAuthorDTO(authorRepository.save(authoreMappper.authorDTOToAUthor(author)));
     }
 
     @Override
@@ -89,14 +88,13 @@ public class AuthorServiceImplJPA implements AuthorService {
         AtomicReference<Optional<AuthorDTO>> atomicReference = new AtomicReference<>();
 
         authorRepository.findById(id).ifPresentOrElse(foundAuthor ->{
-            foundAuthor.setName(authorDTO.getName());
-            foundAuthor.setLastName(authorDTO.getLastName());
-            foundAuthor.setEmail(authorDTO.getEmail());
-            foundAuthor.setBooks(authorDTO.getBooks());
-            foundAuthor.addPublisher(authorDTO.getPublisher());
-            foundAuthor.setVersion(authorDTO.getVersion());
-            atomicReference.set(Optional.of(authoreMappper.authorToAuthorDTO(authorRepository.save(foundAuthor))));
-        } , () -> atomicReference.set(Optional.empty())
+                    foundAuthor.setName(authorDTO.getName());
+                    foundAuthor.setLastName(authorDTO.getLastName());
+                    foundAuthor.setEmail(authorDTO.getEmail());
+                    foundAuthor.setBooks(authorDTO.getBooks());
+                    foundAuthor.setVersion(authorDTO.getVersion());
+                    atomicReference.set(Optional.of(authoreMappper.authorToAuthorDTO(authorRepository.save(foundAuthor))));
+                } , () -> atomicReference.set(Optional.empty())
         );
         return atomicReference.get();
     }
@@ -114,26 +112,23 @@ public class AuthorServiceImplJPA implements AuthorService {
     public Optional<AuthorDTO> patchById(UUID id, AuthorDTO authorDTO) {
         AtomicReference<Optional<AuthorDTO>> atomicReference = new AtomicReference<>();
         authorRepository.findById(id).ifPresentOrElse(foundAuthor ->{
-            if (StringUtils.hasText(authorDTO.getName())){
-                foundAuthor.setName(authorDTO.getName());
-            }
-            if (StringUtils.hasText(authorDTO.getLastName())){
-                foundAuthor.setLastName(authorDTO.getLastName());
-            }
-            if (StringUtils.hasText(authorDTO.getEmail())){
-                foundAuthor.setEmail(authorDTO.getEmail());
-            }
-            if (authorDTO.getPublisher() != null){
-                foundAuthor.addPublisher(authorDTO.getPublisher());
-            }
-            if (authorDTO.getBooks() != null){
-                foundAuthor.setBooks(authorDTO.getBooks());
-            }
+                    if (StringUtils.hasText(authorDTO.getName())){
+                        foundAuthor.setName(authorDTO.getName());
+                    }
+                    if (StringUtils.hasText(authorDTO.getLastName())){
+                        foundAuthor.setLastName(authorDTO.getLastName());
+                    }
+                    if (StringUtils.hasText(authorDTO.getEmail())){
+                        foundAuthor.setEmail(authorDTO.getEmail());
+                    }
+                    if (authorDTO.getBooks() != null){
+                        foundAuthor.setBooks(authorDTO.getBooks());
+                    }
 
-            atomicReference.set(Optional.of(authoreMappper.authorToAuthorDTO(authorRepository.save(foundAuthor))));
+                    atomicReference.set(Optional.of(authoreMappper.authorToAuthorDTO(authorRepository.save(foundAuthor))));
 
-        }, () ->atomicReference.set(Optional.empty())
-                );
+                }, () ->atomicReference.set(Optional.empty())
+        );
         return atomicReference.get();
     }
 }

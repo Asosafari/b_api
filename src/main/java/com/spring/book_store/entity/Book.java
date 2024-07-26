@@ -1,5 +1,7 @@
 package com.spring.book_store.entity;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -12,6 +14,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.type.SqlTypes;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -29,7 +32,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Builder
 @Entity
-public class Book {
+public class Book implements Serializable {
 
     public Book(UUID id, String title, Integer version, BigDecimal price, Publisher publisher
             ,Author author, LocalDateTime createdDate, LocalDateTime updateDate) {
